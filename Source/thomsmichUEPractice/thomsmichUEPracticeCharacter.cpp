@@ -45,6 +45,8 @@ AthomsmichUEPracticeCharacter::AthomsmichUEPracticeCharacter()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
+
+	SprintSpeed = 1.5f;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -74,6 +76,9 @@ void AthomsmichUEPracticeCharacter::SetupPlayerInputComponent(class UInputCompon
 
 	// VR headset functionality
 	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &AthomsmichUEPracticeCharacter::OnResetVR);
+
+	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &AthomsmichUEPracticeCharacter::Sprint);
+	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &AthomsmichUEPracticeCharacter::StopSprinting);
 }
 
 
@@ -137,4 +142,12 @@ void AthomsmichUEPracticeCharacter::MoveRight(float Value)
 		// add movement in that direction
 		AddMovementInput(Direction, Value);
 	}
+}
+
+void AthomsmichUEPracticeCharacter::Sprint() {
+	GetCharacterMovement()->MaxWalkSpeed *= SprintSpeed;
+}
+
+void AthomsmichUEPracticeCharacter::StopSprinting() {
+	GetCharacterMovement()->MaxWalkSpeed /= SprintSpeed;
 }
